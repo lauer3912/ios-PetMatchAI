@@ -43,7 +43,7 @@ class QuizViewController: UIViewController {
         scrollView.translatesAutoresizingMaskIntoConstraints = false
         contentView.translatesAutoresizingMaskIntoConstraints = false
         
-        progressView.progressTintColor = ThemeService.shared.Colors.primary
+        progressView.progressTintColor = ThemeService.shared.colors.primary
         progressView.trackTintColor = UIColor.systemGray4
         contentView.addSubview(progressView)
         
@@ -60,7 +60,7 @@ class QuizViewController: UIViewController {
         
         nextButton.setTitle("Next", for: .normal)
         nextButton.setTitleColor(.white, for: .normal)
-        nextButton.backgroundColor = ThemeService.shared.Colors.primary
+        nextButton.backgroundColor = ThemeService.shared.colors.primary
         nextButton.layer.cornerRadius = 12
         nextButton.titleLabel?.font = .systemFont(ofSize: 16, weight: .semibold)
         nextButton.addTarget(self, action: #selector(nextTapped), for: .touchUpInside)
@@ -175,8 +175,8 @@ class QuizViewController: UIViewController {
         }
         
         // Highlight selected
-        sender.layer.borderColor = ThemeService.shared.Colors.primary.cgColor
-        sender.backgroundColor = ThemeService.shared.Colors.primary.withAlphaComponent(0.1)
+        sender.layer.borderColor = ThemeService.shared.colors.primary.cgColor
+        sender.backgroundColor = ThemeService.shared.colors.primary.withAlphaComponent(0.1)
         
         // Store answer
         userAnswers[question.key] = question.values[sender.tag]

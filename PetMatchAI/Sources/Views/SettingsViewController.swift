@@ -17,7 +17,7 @@ class SettingsViewController: UIViewController {
             SettingsItem(icon: "square.and.arrow.up", title: "Export Data", type: .action, key: "exportData")
         ]),
         ("Subscription", [
-            SettingsItem(icon: "star.fill", title: "Upgrade to Premium", type: .action, key: "upgrade", highlight: true),
+            SettingsItem(icon: "star.fill", title: "Upgrade to Premium", type: .highlight, key: "upgrade"),
             SettingsItem(icon: "creditcard.fill", title: "Manage Subscription", type: .navigation, key: "manageSub")
         ]),
         ("About", [
@@ -50,45 +50,6 @@ class SettingsViewController: UIViewController {
             tableView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor)
         ])
     }
-}
-
-extension SettingsViewController: UITableViewDataSource, UITableViewDelegate {
-    func numberOfSections(in tableView: UITableView) -> Int {
-        return sections.count
-    }
-    
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return sections[section].1.count
-    }
-    
-    func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
-        return sections[section].0
-    }
-    
-    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let item = sections[indexPath.section].1[indexPath.row]
-        
-        switch item.type {
-        case .toggle:
-            let cell = tableView.dequeueReusableCell(withIdentifier: "SettingsToggleCell", for: indexPath) as! SettingsToggleCell
-            cell.configure(with: item)
-            cell.onToggle = { [weak self] isOn in
-                UserDefaults.standard.set(isOn, forKey: item.key)
-                self?.handleAction(for: item)
-            }
-            return cell
-        default:
-            let cell = tableView.dequeueReusableCell(withIdentifier: "SettingsCell", for: indexPath) as! SettingsCell
-            cell.configure(with: item)
-            return cell
-        }
-    }
-    
-    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        tableView.deselectRow(at: indexPath, animated: true)
-        let item = sections[indexPath.section].1[indexPath.row]
-        handleAction(for: item)
-    }
     
     private func handleAction(for item: SettingsItem) {
         switch item.key {
@@ -103,10 +64,8 @@ extension SettingsViewController: UITableViewDataSource, UITableViewDelegate {
         case "deleteAccount":
             confirmDeleteAccount()
         case "privacy":
-            // Open privacy policy
             break
         case "terms":
-            // Open terms of service
             break
         default:
             break
@@ -150,7 +109,6 @@ extension SettingsViewController: UITableViewDataSource, UITableViewDelegate {
                                       preferredStyle: .alert)
         alert.addAction(UIAlertAction(title: "Delete", style: .destructive) { _ in
             DataService.shared.clearAllData()
-            // Navigate back to onboarding
             if let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene,
                let window = windowScene.windows.first {
                 window.rootViewController = UINavigationController(rootViewController: OnboardingViewController())
@@ -162,13 +120,52 @@ extension SettingsViewController: UITableViewDataSource, UITableViewDelegate {
     }
 }
 
+// MARK: - UITableViewDataSource & Delegate
+extension SettingsViewController: UITableViewDataSource, UITableViewDelegate {
+    func numberOfSections(in tableView: UITableView) -> Int {
+        return sections.count
+    }
+    
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return sections[section].1.count
+    }
+    
+    func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
+        return sections[section].0
+    }
+    
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let item = sections[indexPath.section].1[indexPath.row]
+        
+        switch item.type {
+        case .toggle:
+            let cell = tableView.dequeueReusableCell(withIdentifier: "SettingsToggleCell", for: indexPath) as! SettingsToggleCell
+            cell.configure(with: item)
+            cell.onToggle = { [weak self] isOn in
+                UserDefaults.standard.set(isOn, forKey: item.key)
+                self?.handleAction(for: item)
+            }
+            return cell
+        default:
+            let cell = tableView.dequeueReusableCell(withIdentifier: "SettingsCell", for: indexPath) as! SettingsCell
+            cell.configure(with: item)
+            return cell
+        }
+    }
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        tableView.deselectRow(at: indexPath, animated: true)
+        let item = sections[indexPath.section].1[indexPath.row]
+        handleAction(for: item)
+    }
+}
+
 // MARK: - Models
 struct SettingsItem {
     let icon: String
     let title: String
     let type: SettingsItemType
     let key: String
-    var highlight: Bool = false
 }
 
 enum SettingsItemType {
@@ -178,6 +175,7 @@ enum SettingsItemType {
     case action
     case destructive
     case info
+    case highlight
 }
 
 // MARK: - Cells
@@ -198,7 +196,7 @@ class SettingsCell: UITableViewCell {
     private func setupUI() {
         backgroundColor = ThemeService.shared.surfaceColor
         
-        iconView.tintColor = ThemeService.shared.Colors.primary
+        iconView.tintColor = ThemeService.shared.colors.primary
         iconView.contentMode = .scaleAspectFit
         contentView.addSubview(iconView)
         
@@ -238,11 +236,12 @@ class SettingsCell: UITableViewCell {
             titleLabel.textColor = ThemeService.shared.textPrimary
         case .destructive:
             accessoryType = .none
-            titleLabel.textColor = ThemeService.shared.Colors.error
-            iconView.tintColor = ThemeService.shared.Colors.error
+            titleLabel.textColor = ThemeService.shared.colors.error
+            iconView.tintColor = ThemeService.shared.colors.error
         case .highlight:
             accessoryType = .none
-            titleLabel.textColor = ThemeService.shared.Colors.primary
+            titleLabel.textColor = ThemeService.shared.colors.primary
+            iconView.tintColor = ThemeService.shared.colors.primary
         case .info:
             accessoryType = .none
             titleLabel.textColor = ThemeService.shared.textSecondary
@@ -273,7 +272,7 @@ class SettingsToggleCell: UITableViewCell {
         backgroundColor = ThemeService.shared.surfaceColor
         selectionStyle = .none
         
-        iconView.tintColor = ThemeService.shared.Colors.primary
+        iconView.tintColor = ThemeService.shared.colors.primary
         iconView.contentMode = .scaleAspectFit
         contentView.addSubview(iconView)
         
@@ -281,7 +280,7 @@ class SettingsToggleCell: UITableViewCell {
         titleLabel.textColor = ThemeService.shared.textPrimary
         contentView.addSubview(titleLabel)
         
-        toggle.onTintColor = ThemeService.shared.Colors.primary
+        toggle.onTintColor = ThemeService.shared.colors.primary
         toggle.addTarget(self, action: #selector(toggleChanged), for: .valueChanged)
         contentView.addSubview(toggle)
         

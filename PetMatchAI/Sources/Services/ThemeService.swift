@@ -5,28 +5,30 @@ class ThemeService {
     
     struct Colors {
         // Primary - Warm orange/coral for pet/friendly feel
-        static let primary = UIColor(hex: "#F97316")       // Orange
-        static let primaryDark = UIColor(hex: "#EA580C")
-        static let secondary = UIColor(hex: "#22C55E")    // Green - adoption/success
+        let primary = UIColor(hex: "#F97316")       // Orange
+        let primaryDark = UIColor(hex: "#EA580C")
+        let secondary = UIColor(hex: "#22C55E")    // Green - adoption/success
         
         // Backgrounds
-        static let backgroundLight = UIColor(hex: "#FAFAF9")
-        static let backgroundDark = UIColor(hex: "#1C1917")
-        static let surfaceLight = UIColor.white
-        static let surfaceDark = UIColor(hex: "#292524")
+        let backgroundLight = UIColor(hex: "#FAFAF9")
+        let backgroundDark = UIColor(hex: "#1C1917")
+        let surfaceLight = UIColor.white
+        let surfaceDark = UIColor(hex: "#292524")
         
         // Text
-        static let textPrimaryLight = UIColor(hex: "#1C1917")
-        static let textSecondaryLight = UIColor(hex: "#57534E")
-        static let textPrimaryDark = UIColor.white
-        static let textSecondaryDark = UIColor(hex: "#A8A29E")
+        let textPrimaryLight = UIColor(hex: "#1C1917")
+        let textSecondaryLight = UIColor(hex: "#57534E")
+        let textPrimaryDark = UIColor.white
+        let textSecondaryDark = UIColor(hex: "#A8A29E")
         
         // Accent
-        static let accent = UIColor(hex: "#3B82F6")        // Blue for links/interactive
-        static let error = UIColor(hex: "#EF4444")
-        static let warning = UIColor(hex: "#EAB308")
-        static let success = UIColor(hex: "#22C55E")
+        let accent = UIColor(hex: "#3B82F6")        // Blue for links/interactive
+        let error = UIColor(hex: "#EF4444")
+        let warning = UIColor(hex: "#EAB308")
+        let success = UIColor(hex: "#22C55E")
     }
+    
+    var colors = Colors()
     
     private var isDarkMode: Bool {
         return UserDefaults.standard.string(forKey: "preferredTheme") == "dark" ||
@@ -38,43 +40,43 @@ class ThemeService {
         let navBarAppearance = UINavigationBarAppearance()
         if isDarkMode {
             navBarAppearance.configureWithOpaqueBackground()
-            navBarAppearance.backgroundColor = Colors.surfaceDark
-            navBarAppearance.titleTextAttributes = [.foregroundColor: Colors.textPrimaryDark]
-            navBarAppearance.largeTitleTextAttributes = [.foregroundColor: Colors.textPrimaryDark]
+            navBarAppearance.backgroundColor = colors.surfaceDark
+            navBarAppearance.titleTextAttributes = [.foregroundColor: colors.textPrimaryDark]
+            navBarAppearance.largeTitleTextAttributes = [.foregroundColor: colors.textPrimaryDark]
         } else {
             navBarAppearance.configureWithOpaqueBackground()
-            navBarAppearance.backgroundColor = Colors.surfaceLight
-            navBarAppearance.titleTextAttributes = [.foregroundColor: Colors.textPrimaryLight]
-            navBarAppearance.largeTitleTextAttributes = [.foregroundColor: Colors.textPrimaryLight]
+            navBarAppearance.backgroundColor = colors.surfaceLight
+            navBarAppearance.titleTextAttributes = [.foregroundColor: colors.textPrimaryLight]
+            navBarAppearance.largeTitleTextAttributes = [.foregroundColor: colors.textPrimaryLight]
         }
         
         UINavigationBar.appearance().standardAppearance = navBarAppearance
         UINavigationBar.appearance().scrollEdgeAppearance = navBarAppearance
-        UINavigationBar.appearance().tintColor = Colors.primary
+        UINavigationBar.appearance().tintColor = colors.primary
         
         // Tab bar
         let tabBarAppearance = UITabBarAppearance()
         tabBarAppearance.configureWithOpaqueBackground()
-        tabBarAppearance.backgroundColor = isDarkMode ? Colors.surfaceDark : Colors.surfaceLight
+        tabBarAppearance.backgroundColor = isDarkMode ? colors.surfaceDark : colors.surfaceLight
         UITabBar.appearance().standardAppearance = tabBarAppearance
         UITabBar.appearance().scrollEdgeAppearance = tabBarAppearance
-        UITabBar.appearance().tintColor = Colors.primary
+        UITabBar.appearance().tintColor = colors.primary
     }
     
     var backgroundColor: UIColor {
-        isDarkMode ? Colors.backgroundDark : Colors.backgroundLight
+        isDarkMode ? colors.backgroundDark : colors.backgroundLight
     }
     
     var surfaceColor: UIColor {
-        isDarkMode ? Colors.surfaceDark : Colors.surfaceLight
+        isDarkMode ? colors.surfaceDark : colors.surfaceLight
     }
     
     var textPrimary: UIColor {
-        isDarkMode ? Colors.textPrimaryDark : Colors.textPrimaryLight
+        isDarkMode ? colors.textPrimaryDark : colors.textPrimaryLight
     }
     
     var textSecondary: UIColor {
-        isDarkMode ? Colors.textSecondaryDark : Colors.textSecondaryLight
+        isDarkMode ? colors.textSecondaryDark : colors.textSecondaryLight
     }
 }
 
