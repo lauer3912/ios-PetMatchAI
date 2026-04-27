@@ -2,7 +2,7 @@ name: PetMatchAI
 options:
   bundleIdPrefix: com.ggsheng
   deploymentTarget:
-    iOS: "15.0"
+    iOS: "17.0"
   xcodeVersion: "15.0"
   generateEmptyDirectories: true
   groupSortPosition: top
@@ -23,17 +23,27 @@ targets:
     platform: iOS
     sources:
       - path: PetMatchAI/Sources
-      - path: PetMatchAI/Sources/Resources
-        buildPhase: resources
+        excludes:
+          - "**/.DS_Store"
     settings:
       base:
         INFOPLIST_FILE: PetMatchAI/Info.plist
         PRODUCT_BUNDLE_IDENTIFIER: com.ggsheng.PetMatchAI
+        PRODUCT_NAME: PetMatchAI
         ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
         ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME: AccentColor
+        GENERATE_INFOPLIST_FILE: NO
+        CODE_SIGN_STYLE: Automatic
+        CODE_SIGNING_ALLOWED: NO
+        DEVELOPMENT_TEAM: "9L6N2ZF26B"
         LD_RUNPATH_SEARCH_PATHS: "$(inherited) @executable_path/Frameworks"
         TARGETED_DEVICE_FAMILY: "1,2"
         SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD: YES
+      configs:
+        Debug:
+          CODE_SIGNING_ALLOWED: NO
+        Release:
+          CODE_SIGNING_ALLOWED: YES
     dependencies:
       - target: PetMatchAITests
       - target: PetMatchAIUITests
@@ -43,29 +53,42 @@ targets:
     platform: iOS
     sources:
       - path: PetMatchAITests
+        excludes:
+          - "**/.DS_Store"
     settings:
       base:
         INFOPLIST_FILE: PetMatchAITests/Info.plist
-        BUNDLE_LOADER: "$(TEST_HOST)"
+        PRODUCT_BUNDLE_IDENTIFIER: com.ggsheng.PetMatchAITests
+        PRODUCT_NAME: PetMatchAITests
+        GENERATE_INFOPLIST_FILE: NO
+        CODE_SIGN_STYLE: Automatic
+        DEVELOPMENT_TEAM: "9L6N2ZF26B"
         TEST_HOST: "$(BUILT_PRODUCTS_DIR)/PetMatchAI.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/PetMatchAI"
-        GENERATE_INFOPLIST_FILE: YES
+        BUNDLE_LOADER: "$(TEST_HOST)"
 
   PetMatchAIUITests:
     type: bundle.ui-testing
     platform: iOS
     sources:
       - path: PetMatchAIUITests
+        excludes:
+          - "**/.DS_Store"
     settings:
       base:
         INFOPLIST_FILE: PetMatchAIUITests/Info.plist
+        PRODUCT_BUNDLE_IDENTIFIER: com.ggsheng.PetMatchAIUITests
+        PRODUCT_NAME: PetMatchAIUITests
+        GENERATE_INFOPLIST_FILE: NO
+        CODE_SIGN_STYLE: Automatic
+        DEVELOPMENT_TEAM: "9L6N2ZF26B"
         TEST_TARGET_NAME: PetMatchAI
-        GENERATE_INFOPLIST_FILE: YES
 
 schemes:
   PetMatchAI:
     build:
       targets:
         PetMatchAI: all
+        PetMatchAIUITests: [test]
     run:
       config: Debug
     test:
