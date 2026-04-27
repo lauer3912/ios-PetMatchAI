@@ -76,7 +76,7 @@ class FavoritesViewController: UIViewController {
         let browseButton = UIButton(type: .system)
         browseButton.setTitle("Browse Pets", for: .normal)
         browseButton.setTitleColor(.white, for: .normal)
-        browseButton.backgroundColor = ThemeService.shared.Colors.primary
+        browseButton.backgroundColor = ThemeService.shared.colors.primary
         browseButton.layer.cornerRadius = 12
         browseButton.addTarget(self, action: #selector(browseTapped), for: .touchUpInside)
         emptyStateView.addSubview(browseButton)

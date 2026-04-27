@@ -55,7 +55,7 @@ class OnboardingViewController: UIViewController {
         subtitleLabel.text = "Answer a few questions to find your perfect match"
         contentView.addSubview(subtitleLabel)
         
-        progressView.progressTintColor = ThemeService.shared.Colors.primary
+        progressView.progressTintColor = ThemeService.shared.colors.primary
         progressView.trackTintColor = UIColor.systemGray4
         contentView.addSubview(progressView)
         
@@ -64,7 +64,7 @@ class OnboardingViewController: UIViewController {
         
         nextButton.setTitle("Next", for: .normal)
         nextButton.setTitleColor(.white, for: .normal)
-        nextButton.backgroundColor = ThemeService.shared.Colors.primary
+        nextButton.backgroundColor = ThemeService.shared.colors.primary
         nextButton.layer.cornerRadius = 12
         nextButton.titleLabel?.font = .systemFont(ofSize: 16, weight: .semibold)
         nextButton.addTarget(self, action: #selector(nextTapped), for: .touchUpInside)
@@ -183,8 +183,8 @@ class OnboardingViewController: UIViewController {
             button.layer.borderColor = UIColor.systemGray4.cgColor
             button.backgroundColor = ThemeService.shared.surfaceColor
         }
-        sender.layer.borderColor = ThemeService.shared.Colors.primary.cgColor
-        sender.backgroundColor = ThemeService.shared.Colors.primary.withAlphaComponent(0.1)
+        sender.layer.borderColor = ThemeService.shared.colors.primary.cgColor
+        sender.backgroundColor = ThemeService.shared.colors.primary.withAlphaComponent(0.1)
         
         // Store answer
         let value = q.values[sender.tag]

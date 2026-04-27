@@ -65,12 +65,12 @@ class PetDetailViewController: UIViewController {
         contentView.addSubview(breedLabel)
         
         // Match badge
-        matchBadge.backgroundColor = ThemeService.shared.Colors.success.withAlphaComponent(0.15)
+        matchBadge.backgroundColor = ThemeService.shared.colors.success.withAlphaComponent(0.15)
         matchBadge.layer.cornerRadius = 12
         contentView.addSubview(matchBadge)
         
         matchLabel.font = .systemFont(ofSize: 14, weight: .bold)
-        matchLabel.textColor = ThemeService.shared.Colors.success
+        matchLabel.textColor = ThemeService.shared.colors.success
         matchBadge.addSubview(matchLabel)
         
         // Description
@@ -93,7 +93,7 @@ class PetDetailViewController: UIViewController {
         // Apply button
         applyButton.setTitle("Apply to Adopt", for: .normal)
         applyButton.setTitleColor(.white, for: .normal)
-        applyButton.backgroundColor = ThemeService.shared.Colors.primary
+        applyButton.backgroundColor = ThemeService.shared.colors.primary
         applyButton.layer.cornerRadius = 12
         applyButton.titleLabel?.font = .systemFont(ofSize: 16, weight: .semibold)
         applyButton.addTarget(self, action: #selector(applyTapped), for: .touchUpInside)
@@ -214,7 +214,7 @@ class PetDetailViewController: UIViewController {
         container.layer.cornerRadius = 8
         
         let iconView = UIImageView(image: UIImage(systemName: icon))
-        iconView.tintColor = ThemeService.shared.Colors.primary
+        iconView.tintColor = ThemeService.shared.colors.primary
         iconView.contentMode = .scaleAspectFit
         container.addSubview(iconView)
         

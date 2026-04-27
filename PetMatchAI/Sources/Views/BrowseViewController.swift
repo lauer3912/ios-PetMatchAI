@@ -55,7 +55,7 @@ class BrowseViewController: UIViewController {
             let button = UIButton(type: .system)
             button.setTitle(filter, for: .normal)
             button.setTitleColor(index == 0 ? .white : ThemeService.shared.textPrimary, for: .normal)
-            button.backgroundColor = index == 0 ? ThemeService.shared.Colors.primary : ThemeService.shared.surfaceColor
+            button.backgroundColor = index == 0 ? ThemeService.shared.colors.primary : ThemeService.shared.surfaceColor
             button.layer.cornerRadius = 16
             button.contentEdgeInsets = UIEdgeInsets(top: 8, left: 16, bottom: 8, right: 16)
             button.tag = index
@@ -112,7 +112,7 @@ class BrowseViewController: UIViewController {
         
         // Highlight selected
         sender.setTitleColor(.white, for: .normal)
-        sender.backgroundColor = ThemeService.shared.Colors.primary
+        sender.backgroundColor = ThemeService.shared.colors.primary
         
         applyFilters()
     }
@@ -220,11 +220,11 @@ class BrowsePetCell: UICollectionViewCell {
         containerView.addSubview(breedLabel)
         
         matchLabel.font = .systemFont(ofSize: 12, weight: .medium)
-        matchLabel.textColor = ThemeService.shared.Colors.success
+        matchLabel.textColor = ThemeService.shared.colors.success
         containerView.addSubview(matchLabel)
         
         priceLabel.font = .systemFont(ofSize: 12, weight: .medium)
-        priceLabel.textColor = ThemeService.shared.Colors.primary
+        priceLabel.textColor = ThemeService.shared.colors.primary
         containerView.addSubview(priceLabel)
         
         containerView.translatesAutoresizingMaskIntoConstraints = false

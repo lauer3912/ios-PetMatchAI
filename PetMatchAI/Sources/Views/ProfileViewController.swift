@@ -44,7 +44,7 @@ class ProfileViewController: UIViewController {
     }
     
     private func setupAvatar() {
-        avatarView.backgroundColor = ThemeService.shared.Colors.primary
+        avatarView.backgroundColor = ThemeService.shared.colors.primary
         avatarView.layer.cornerRadius = 50
         contentView.addSubview(avatarView)
         
@@ -98,7 +98,7 @@ class ProfileViewController: UIViewController {
         container.layer.cornerRadius = 12
         
         let iconView = UIImageView(image: UIImage(systemName: icon))
-        iconView.tintColor = ThemeService.shared.Colors.primary
+        iconView.tintColor = ThemeService.shared.colors.primary
         iconView.contentMode = .scaleAspectFit
         container.addSubview(iconView)
         
@@ -150,7 +150,7 @@ class ProfileViewController: UIViewController {
         
         let progressBar = UIProgressView(progressViewStyle: .default)
         progressBar.progress = 0.8
-        progressBar.progressTintColor = ThemeService.shared.Colors.primary
+        progressBar.progressTintColor = ThemeService.shared.colors.primary
         progressBar.trackTintColor = UIColor.systemGray4
         quizProgressCard.addSubview(progressBar)
         
@@ -163,7 +163,7 @@ class ProfileViewController: UIViewController {
         let completeButton = UIButton(type: .system)
         completeButton.setTitle("Complete Quiz", for: .normal)
         completeButton.setTitleColor(.white, for: .normal)
-        completeButton.backgroundColor = ThemeService.shared.Colors.primary
+        completeButton.backgroundColor = ThemeService.shared.colors.primary
         completeButton.layer.cornerRadius = 8
         completeButton.titleLabel?.font = .systemFont(ofSize: 14, weight: .medium)
         completeButton.addTarget(self, action: #selector(completeQuizTapped), for: .touchUpInside)
