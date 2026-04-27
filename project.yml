@@ -44,9 +44,6 @@ targets:
           CODE_SIGNING_ALLOWED: NO
         Release:
           CODE_SIGNING_ALLOWED: YES
-    dependencies:
-      - target: PetMatchAITests
-      - target: PetMatchAIUITests
 
   PetMatchAITests:
     type: bundle.unit-test
@@ -65,6 +62,10 @@ targets:
         DEVELOPMENT_TEAM: "9L6N2ZF26B"
         TEST_HOST: "$(BUILT_PRODUCTS_DIR)/PetMatchAI.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/PetMatchAI"
         BUNDLE_LOADER: "$(TEST_HOST)"
+        ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES: YES
+    dependencies:
+      - target: PetMatchAI
+        embed: false
 
   PetMatchAIUITests:
     type: bundle.ui-testing
@@ -82,13 +83,16 @@ targets:
         CODE_SIGN_STYLE: Automatic
         DEVELOPMENT_TEAM: "9L6N2ZF26B"
         TEST_TARGET_NAME: PetMatchAI
+        ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES: YES
+    dependencies:
+      - target: PetMatchAI
+        embed: false
 
 schemes:
   PetMatchAI:
     build:
       targets:
         PetMatchAI: all
-        PetMatchAIUITests: [test]
     run:
       config: Debug
     test:
