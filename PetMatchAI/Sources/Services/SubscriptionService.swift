@@ -7,16 +7,13 @@ class SubscriptionService {
     private let expirationKey = "premiumExpiration"
     
     var isPremium: Bool {
-        get {
-            let isPurchased = UserDefaults.standard.bool(forKey: premiumKey)
-            if isPurchased {
-                if let expiration = UserDefaults.standard.object(forKey: expirationKey) as? Date {
-                    return expiration > Date()
-                }
+        let isPurchased = UserDefaults.standard.bool(forKey: premiumKey)
+        if isPurchased {
+            if let expiration = UserDefaults.standard.object(forKey: expirationKey) as? Date {
+                return expiration > Date()
             }
-            return false
         }
-        return UserDefaults.standard.bool(forKey: premiumKey)
+        return false
     }
     
     var subscriptionPlans: [SubscriptionPlan] {
@@ -29,36 +26,41 @@ class SubscriptionService {
     func purchaseSubscription(plan: SubscriptionPlan) {
         // In a real app, this would use StoreKit to process the purchase
         // For now, we simulate a successful purchase
-        UserDefaults.standard.set(true, forKey: premiumKey)
+        let expiration = plan.period == .monthly ?
+            Calendar.current.date(byAdding: .month, value: 1, to: Date()) :
+            Calendar.current.date(byAdding: .year, value: 1, to: Date())
         
-        let expirationDate: Date
-        switch plan.period {
-        case .monthly:
-            expirationDate = Calendar.current.date(byAdding: .month, value: 1, to: Date()) ?? Date()
-        case .yearly:
-            expirationDate = Calendar.current.date(byAdding: .year, value: 1, to: Date()) ?? Date()
-        }
-        UserDefaults.standard.set(expirationDate, forKey: expirationKey)
+        UserDefaults.standard.set(true, forKey: premiumKey)
+        UserDefaults.standard.set(expiration, forKey: expirationKey)
+        
+        NotificationCenter.default.post(name: .subscriptionStatusChanged, object: nil)
     }
     
     func restorePurchases() {
-        // In a real app, this would check with StoreKit for previous purchases
-        // For now, we just check if there was a past purchase
+        // In a real app, this would call StoreKit to restore purchases
+        // For demo purposes, we'll just post a notification
+        NotificationCenter.default.post(name: .subscriptionStatusChanged, object: nil)
     }
     
     func cancelSubscription() {
         UserDefaults.standard.set(false, forKey: premiumKey)
         UserDefaults.standard.removeObject(forKey: expirationKey)
+        NotificationCenter.default.post(name: .subscriptionStatusChanged, object: nil)
     }
-}
-
-struct SubscriptionPlan {
-    let name: String
-    let price: Double
-    let period: SubscriptionPeriod
     
-    var formattedPrice: String {
-        return "$\(String(format: "%.2f", price))/\(period == .monthly ? "mo" : "yr")"
+    func getSubscriptionStatus() -> SubscriptionStatus {
+        if isPremium {
+            if let expiration = UserDefaults.standard.object(forKey: expirationKey) as? Date {
+                let daysRemaining = Calendar.current.dateComponents([.day], from: Date(), to: expiration).day ?? 0
+                return .active(expiration: expiration, daysRemaining: daysRemaining)
+            }
+            return .active(expiration: Date(), daysRemaining: 0)
+        }
+        return .notSubscribed
+    }
+    
+    func getExpirationDate() -> Date? {
+        return UserDefaults.standard.object(forKey: expirationKey) as? Date
     }
 }
 
@@ -67,49 +69,40 @@ enum SubscriptionPeriod {
     case yearly
 }
 
-// MARK: - Notification Service
-class NotificationService {
-    static let shared = NotificationService()
+struct SubscriptionPlan {
+    let name: String
+    let price: Double
+    let period: SubscriptionPeriod
     
-    func requestAuthorization(completion: @escaping (Bool) -> Void) {
-        UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .badge, .sound]) { granted, error in
-            DispatchQueue.main.async {
-                completion(granted)
-            }
+    var formattedPrice: String {
+        return String(format: "$%.2f", price)
+    }
+    
+    var monthlyPrice: Double {
+        switch period {
+        case .monthly:
+            return price
+        case .yearly:
+            return price / 12.0
         }
-    }
-    
-    func scheduleMatchNotification(for pet: Pet) {
-        let content = UNMutableNotificationContent()
-        content.title = "New Match Found!"
-        content.body = "\(pet.name) is a \(pet.matchScore)% match for you! Tap to view."
-        content.sound = .default
-        
-        let trigger = UNTimeIntervalNotificationTrigger(timeInterval: 1, repeats: false)
-        let request = UNNotificationRequest(identifier: pet.id, content: content, trigger: trigger)
-        
-        UNUserNotificationCenter.current().add(request)
-    }
-    
-    func scheduleWeeklyRecommendation() {
-        let content = UNMutableNotificationContent()
-        content.title = "Your Weekly Matches"
-        content.body = "Check out new pets that match your lifestyle!"
-        content.sound = .default
-        
-        var dateComponents = DateComponents()
-        dateComponents.weekday = 1 // Sunday
-        dateComponents.hour = 10
-        
-        let trigger = UNCalendarNotificationTrigger(dateMatching: dateComponents, repeats: true)
-        let request = UNNotificationRequest(identifier: "weekly_matches", content: content, trigger: trigger)
-        
-        UNUserNotificationCenter.current().add(request)
-    }
-    
-    func cancelNotification(for petId: String) {
-        UNUserNotificationCenter.current().removePendingNotificationRequests(withIdentifiers: [petId])
     }
 }
 
-import UserNotifications
+enum SubscriptionStatus {
+    case notSubscribed
+    case active(expiration: Date, daysRemaining: Int)
+    case expired
+    
+    var isActive: Bool {
+        switch self {
+        case .active:
+            return true
+        case .notSubscribed, .expired:
+            return false
+        }
+    }
+}
+
+extension Notification.Name {
+    static let subscriptionStatusChanged = Notification.Name("subscriptionStatusChanged")
+}
