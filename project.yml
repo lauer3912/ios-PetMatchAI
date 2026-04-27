@@ -1,0 +1,81 @@
+name: PetMatchAI
+options:
+  bundleIdPrefix: com.ggsheng
+  deploymentTarget:
+    iOS: "15.0"
+  xcodeVersion: "15.0"
+  generateEmptyDirectories: true
+  groupSortPosition: top
+  developmentLanguage: en
+
+settings:
+  base:
+    MARKETING_VERSION: "1.0.0"
+    CURRENT_PROJECT_VERSION: "1"
+    SWIFT_VERSION: "5.9"
+    CODE_SIGN_STYLE: Automatic
+    DEVELOPMENT_TEAM: "9L6N2ZF26B"
+    ENABLE_USER_SCRIPT_SANDBOXING: NO
+
+targets:
+  PetMatchAI:
+    type: application
+    platform: iOS
+    sources:
+      - path: PetMatchAI/Sources
+      - path: PetMatchAI/Sources/Resources
+        buildPhase: resources
+    settings:
+      base:
+        INFOPLIST_FILE: PetMatchAI/Info.plist
+        PRODUCT_BUNDLE_IDENTIFIER: com.ggsheng.PetMatchAI
+        ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
+        ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME: AccentColor
+        LD_RUNPATH_SEARCH_PATHS: "$(inherited) @executable_path/Frameworks"
+        TARGETED_DEVICE_FAMILY: "1,2"
+        SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD: YES
+    dependencies:
+      - target: PetMatchAITests
+      - target: PetMatchAIUITests
+
+  PetMatchAITests:
+    type: bundle.unit-test
+    platform: iOS
+    sources:
+      - path: PetMatchAITests
+    settings:
+      base:
+        INFOPLIST_FILE: PetMatchAITests/Info.plist
+        BUNDLE_LOADER: "$(TEST_HOST)"
+        TEST_HOST: "$(BUILT_PRODUCTS_DIR)/PetMatchAI.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/PetMatchAI"
+        GENERATE_INFOPLIST_FILE: YES
+
+  PetMatchAIUITests:
+    type: bundle.ui-testing
+    platform: iOS
+    sources:
+      - path: PetMatchAIUITests
+    settings:
+      base:
+        INFOPLIST_FILE: PetMatchAIUITests/Info.plist
+        TEST_TARGET_NAME: PetMatchAI
+        GENERATE_INFOPLIST_FILE: YES
+
+schemes:
+  PetMatchAI:
+    build:
+      targets:
+        PetMatchAI: all
+    run:
+      config: Debug
+    test:
+      config: Debug
+      targets:
+        - PetMatchAITests
+        - PetMatchAIUITests
+    profile:
+      config: Release
+    analyze:
+      config: Debug
+    archive:
+      config: Release
